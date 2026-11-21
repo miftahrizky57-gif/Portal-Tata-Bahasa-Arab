@@ -1,0 +1,6 @@
+{
+  "name": "Portal Tata Bahasa Arab",
+  "description": "Aplikasi pengenalan dan tata bahasa Arab bagi pemula dengan visualisasi modern dan interaktif.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

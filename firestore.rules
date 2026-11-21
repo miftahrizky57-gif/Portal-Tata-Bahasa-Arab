@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net - catch-all deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions for secure validation (Phase 3 Primitive Definition)
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches("^[a-zA-Z0-9_\\-\\s,\\.\\'\\(\\)]+$"); 
+    }
+    
+    function incoming() { 
+      return request.resource.data; 
+    }
+    
+    function existing() { 
+      return resource.data; 
+    }
+
+    // Helper to validate studentProgress schema (Anti-Update-Gap / Pillar 2)
+    function isValidStudentProgress(data) {
+      return data.name is string && data.name.size() <= 100
+        && data.peran is string && (data.peran == 'siswa' || data.peran == 'guru' || data.peran == 'admin')
+        && data.kelas is string && data.kelas.size() <= 50
+        && data.gender is string && (data.gender == 'laki-laki' || data.gender == 'perempuan')
+        && data.completedMateriIndices is list
+        && data.updatedAt is string;
+    }
+
+    // Helper to validate studentScore schema (Pillar 2 / Pillar 5)
+    function isValidStudentScore(data) {
+      return data.name is string && data.name.size() <= 100
+        && data.role is string && data.role.size() <= 50
+        && data.class is string && data.class.size() <= 50
+        && data.score is number && data.score >= 0 && data.score <= 100
+        && data.date is string && data.date.size() <= 50
+        && data.status is string && (data.status == 'Lulus' || data.status == 'Remedial')
+        && data.createdAt is string;
+    }
+
+    // 2. Rules for student progress collection
+    match /students/{studentName} {
+      allow get: if isValidId(studentName);
+      allow list: if true;
+      // Siswa, Guru, dan Admin hanya diperbolehkan membuat dan menyimpan/memperbarui data
+      allow create, update: if isValidId(studentName) && isValidStudentProgress(incoming());
+      // Operasi hapus langsung dari client/console DIBLOKIR demi keamanan database
+      allow delete: if false;
+    }
+
+    // 3. Rules for scores collection
+    match /scores/{scoreId} {
+      allow get: if isValidId(scoreId);
+      allow list: if true;
+      // Siswa, Guru, dan Admin hanya diperbolehkan membuat dan menyimpan/memperbarui nilai
+      allow create, update: if isValidId(scoreId) && isValidStudentScore(incoming());
+      // Operasi hapus langsung dari client/console DIBLOKIR demi keamanan database
+      allow delete: if false;
+    }
+  }
+}

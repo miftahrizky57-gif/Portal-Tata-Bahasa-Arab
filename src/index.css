@@ -1,0 +1,443 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Cairo:wght@400;600;700&family=Scheherazade+New:wght@400;700&family=Karla:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --sky-light: #eaf6ff;
+  --sky-mid: #cfe9ff;
+  --blue-deep: #0d3b78;
+  --blue-deeper: #0a2c5c;
+  --blue: #1f6fe5;
+  --blue-bright: #3fa0ff;
+  --yellow: #ffb020;
+  --coral: #ff6f61;
+  --ink: #0f2743;
+  --white: #ffffff;
+  --line: rgba(15, 39, 67, 0.12);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  background-color: var(--sky-light);
+}
+
+@media (min-width: 768px) {
+  body {
+    overflow-y: auto;
+    min-height: 100vh;
+  }
+}
+
+.arabic {
+  font-family: 'Traditional Arabic', 'Amiri', 'Noto Naskh Arabic', serif;
+  direction: rtl;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.8;
+}
+
+.font-arabic {
+  font-family: 'Traditional Arabic', 'Amiri', 'Noto Naskh Arabic', serif !important;
+}
+
+.font-times {
+  font-family: 'Times New Roman', Times, Baskerville, Georgia, serif !important;
+}
+
+/* ================= BLUE STAGE BACKGROUND ================= */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 20%, rgba(63, 160, 255, 0.25), transparent 60%),
+              linear-gradient(135deg, #0a356e 0%, #0d3b78 45%, #1f6fe5 100%);
+  display: block;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50px;
+  filter: blur(1px);
+  animation: drift linear infinite;
+}
+
+@keyframes drift {
+  0% { transform: translateX(-140px); }
+  100% { transform: translateX(calc(100vw)); }
+}
+
+.quote {
+  position: absolute;
+  bottom: 44px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  z-index: 4;
+  padding: 0 40px;
+}
+
+.quote .arabic {
+  display: block;
+  font-size: 1.15rem;
+  color: var(--yellow);
+  margin-bottom: 6px;
+}
+
+/* ================= 3D WALKING STUDENTS ================= */
+.scene {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+  perspective-origin: 50% 70%;
+}
+
+.ground-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 130px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  z-index: 2;
+}
+
+.student {
+  position: absolute;
+  bottom: 120px;
+  left: -140px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  animation-name: walk-across, bob;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-direction: normal, alternate;
+  opacity: 0.95;
+}
+
+.s1 { width: 48px; animation-duration: 16s, 0.55s; animation-delay: 0s, 0s; }
+.s2 { width: 34px; bottom: 150px; animation-duration: 22s, 0.6s; animation-delay: -6s, 0.1s; opacity: 0.7; }
+.s3 { width: 38px; bottom: 100px; animation-duration: 19s, 0.5s; animation-delay: -11s, 0.2s; opacity: 0.85; }
+.s4 { width: 28px; bottom: 170px; animation-duration: 26s, 0.65s; animation-delay: -3s, 0.05s; opacity: 0.55; }
+
+@keyframes walk-across {
+  0%   { left: -10%; transform: translateZ(-40px) rotateY(-6deg); }
+  48%  { transform: translateZ(60px) rotateY(0deg); }
+  50%  { transform: translateZ(60px) rotateY(0deg) scaleX(-1); }
+  98%  { transform: translateZ(-40px) rotateY(6deg) scaleX(-1); }
+  100% { left: 108%; transform: translateZ(-40px) rotateY(6deg) scaleX(-1); }
+}
+
+@keyframes bob {
+  0% { margin-bottom: 0px; }
+  100% { margin-bottom: 6px; }
+}
+
+.student svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.scene-banner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene-banner .student {
+  bottom: 8px !important;
+  left: -60px;
+}
+
+.letters {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.flet {
+  position: absolute;
+  font-family: 'Amiri', serif;
+  color: var(--blue);
+  opacity: 0;
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  0% { transform: translateY(20px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.18; }
+  85% { opacity: 0.18; }
+  100% { transform: translateY(-540px) rotate(8deg); opacity: 0; }
+}
+
+/* ================= LOGIN CARD ================= */
+.card-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: min(450px, 92vw);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(31, 111, 229, 0.25);
+  border-radius: 10px;
+  box-shadow: 0 40px 80px -30px rgba(13, 59, 120, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.4);
+  padding: 34px 34px 28px;
+  position: relative;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .card-wrap {
+    width: 480px;
+  }
+  .card {
+    padding: 44px 44px 36px;
+    border-radius: 14px;
+  }
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--yellow), var(--coral), var(--blue-bright));
+  border-radius: 0 0 3px 3px;
+}
+
+.mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--blue-bright), var(--blue-deep));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  box-shadow: 0 6px 18px rgba(31, 111, 229, 0.35);
+}
+
+.title-wrap {
+  perspective: 700px;
+  margin-bottom: 6px;
+}
+
+.title3d {
+  font-family: 'Amiri', serif;
+  font-size: 1.35rem;
+  text-align: center;
+  color: var(--blue-deep);
+  direction: rtl;
+  line-height: 1.6;
+  transform-style: preserve-3d;
+  animation: floatTitle 5s ease-in-out infinite;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6), 0 3px 10px rgba(31, 111, 229, 0.25);
+}
+
+@keyframes floatTitle {
+  0%, 100% { transform: rotateX(6deg) rotateY(-3deg) translateY(0); }
+  50% { transform: rotateX(-4deg) rotateY(3deg) translateY(-5px); }
+}
+
+.card .sub {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #4a5f78;
+  margin-bottom: 24px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field > label.group-label {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue-deep);
+  margin-bottom: 9px;
+}
+
+.pill-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill-group input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3a4f68;
+  background: rgba(31, 111, 229, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all .18s;
+}
+
+.pill svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pill-group input:checked + .pill {
+  background: linear-gradient(160deg, var(--blue-bright), var(--blue));
+  border-color: var(--blue);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(31, 111, 229, 0.3);
+  transform: translateY(-1px);
+}
+
+.pill-group input:focus-visible + .pill {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.pill-group input:checked + .pill svg {
+  filter: brightness(0) invert(1);
+}
+
+select#kelas {
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: rgba(31, 111, 229, 0.04);
+  font-size: 0.92rem;
+  color: var(--ink);
+  font-family: "Times New Roman", Times, Georgia, serif;
+  cursor: pointer;
+}
+
+select#kelas:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2px 0 22px;
+  font-size: 0.82rem;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #3a4f68;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember input {
+  accent-color: var(--blue);
+  width: 14px;
+  height: 14px;
+}
+
+.row-between a {
+  color: var(--coral);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.row-between a:hover {
+  text-decoration: underline;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(160deg, var(--blue-bright), var(--blue-deep));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(13, 59, 120, 0.35);
+}
+
+.btn-submit:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.signup {
+  text-align: center;
+  font-size: 0.86rem;
+  color: #4a5f78;
+  margin-top: 18px;
+}
+
+.signup-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(255, 176, 32, 0.1);
+  border: 1px dashed var(--yellow);
+  color: var(--blue-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 18px;
+  width: 100%;
+}
+
+@media (max-width: 820px) {
+  .quote {
+    display: none;
+  }
+  .card {
+    padding: 28px 22px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student, .flet, .cloud, .title3d {
+    animation: none !important;
+  }
+}

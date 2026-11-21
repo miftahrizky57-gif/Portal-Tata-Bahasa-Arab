@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "studentProgress": {
+      "title": "Student Progress",
+      "description": "Tracks the learning progress, completed topics, and quiz answers for each student.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the student"
+        },
+        "peran": {
+          "type": "string",
+          "enum": ["siswa", "guru", "admin"],
+          "description": "The student role"
+        },
+        "kelas": {
+          "type": "string",
+          "description": "The grade or classroom designation"
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["laki-laki", "perempuan"],
+          "description": "Gender of the student"
+        },
+        "completedMateriIndices": {
+          "type": "array",
+          "description": "List of indices of topics completed by the student"
+        },
+        "latihanAnswers": {
+          "type": "object",
+          "description": "Key-value pair of question IDs to selected answer indices"
+        },
+        "materiStepProgress": {
+          "type": "object",
+          "description": "Key-value pair of topic indices to their unlocked step name"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this record was last modified"
+        }
+      },
+      "required": ["name", "peran", "kelas", "gender", "completedMateriIndices", "updatedAt"]
+    },
+    "studentScore": {
+      "title": "Student Score",
+      "description": "Stores final evaluation test scores for the global real-time leaderboard.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the student"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the user (e.g., Siswa, Guru, Admin)"
+        },
+        "class": {
+          "type": "string",
+          "description": "Classroom details"
+        },
+        "score": {
+          "type": "number",
+          "description": "Evaluated score percentage"
+        },
+        "date": {
+          "type": "string",
+          "description": "Formatted date of the evaluation"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Lulus", "Remedial"],
+          "description": "Passing status of the evaluation"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this score was saved"
+        }
+      },
+      "required": ["name", "role", "class", "score", "date", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "students/{studentName}": {
+      "schema": "studentProgress",
+      "description": "Durable storage for each unique student's learning progress"
+    },
+    "scores/{scoreId}": {
+      "schema": "studentScore",
+      "description": "Leaderboard scores submitted upon completing evaluative tests"
+    }
+  }
+}
